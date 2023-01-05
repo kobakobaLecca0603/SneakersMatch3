@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Socialite;
+use App\User;
 
 class LoginController extends Controller
 {
@@ -26,6 +28,8 @@ class LoginController extends Controller
      *
      * @var string
      */
+     
+    
     protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
@@ -37,4 +41,34 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+    
+    public function redirectToGoogle()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+    
+    public function handleGoogleCallback()
+    {
+        $googleUser = Socialite::driver('google')->user();
+        $user = User::where('email', $googleUser->email)->first();
+        
+        if ($user == null) {
+            $user = $this->createUserByGoogle($googleUser);
+        }
+        
+        \Auth::login($user, true);
+        return redirect('/');
+    }
+ 
+    public function createUserByGoogle($googleUser)
+    {
+        $user = User::create([
+            'name'     => $googleUser->name,
+            'email'    => $googleUser->email,
+            'password' => \Hash::make(uniqid()),
+        ]);
+        return $user;
+    }
+    
+    
 }
