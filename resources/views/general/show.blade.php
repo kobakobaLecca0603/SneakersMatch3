@@ -44,7 +44,9 @@
         </div></br>
         
         <p>スニーカー歴:{{$profile->musical_experience}}</p>
-        <img src="{{$profile->image->image_path}}" alt="" class='image-show'/>
+        <div>
+        <img src="{{$profile->image_url}}" alt="" class='image-show'/>
+        </div>
         </br>
     </div>
     <!-- Option 1: Bootstrap Bundle with Popper -->

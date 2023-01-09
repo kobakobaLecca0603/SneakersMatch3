@@ -31,7 +31,7 @@ class ChatController extends Controller
                             ->orWhere([['send',  $receiver],['receive', $sender]])
                             ->get();
         $profile = $user->profile;
-        $image = $profile->image->image_path;
+        $image = $profile->image_url;
         
         return view ('chat/chat')->with([
             'messages'=>$message,

@@ -16,7 +16,7 @@ use App\Image;
 use App\InstrumentProfile;
 use App\Message;
 use App\ChatController;
-use Storage;
+use Cloudinary;
 use DB;
 
 class UserController extends Controller
@@ -124,15 +124,15 @@ class UserController extends Controller
     {  
         
         //s3へのファイルアップロード開始
-        $profile_image = $request->file('image');
-        $path = Storage::disk('s3')->putFile('myprefix', $profile_image, 'public');
-        $image->image_path = Storage::disk('s3')->url($path);
-        $image->save();
+        $input = $request['image'];
+        $image_url = Cloudinary::upload($request->file('image')->getRealPath())->getSecurePath();
+       
+        
         //s3へのファイルアップロード終了
         
         //プロフィール内容の取得開始
         $input_profile = $request['profile'];
-        $input_profile += ['image_id' => $image->id];
+        $input_profile += ['image_url' => $image_url];
         $input_instruments = $request['instruments_array'];
         $input_genres = $request['genres_array'];
         //プロフィール内容の取得終了
