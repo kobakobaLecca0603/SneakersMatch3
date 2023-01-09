@@ -75,7 +75,7 @@
             </div>
             
             <p>スニーカー歴:{{$profile->musical_experience}}</p>
-            <img src="{{$profile->image->image_path}}" alt="" class='image-index'/>
+            <img src="{{$profile->image_url}}" alt="" class='image-index'/>
         </div>
     @endforeach
     <p class='back-to-home'><a href='/'>ホーム画面に戻る</a></p>

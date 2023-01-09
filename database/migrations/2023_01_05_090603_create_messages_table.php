@@ -18,7 +18,7 @@ class CreateMessagesTable extends Migration
             $table->bigInteger('send')->comment('送信者');
             $table->bigInteger('receive')->comment('受信者');
             $table->text('message')->comment('メッセージ');
-            $table->boolean('is_nice');
+            $table->boolean('is_nice')->default(0);
             $table->timestamps();
         });
     }
