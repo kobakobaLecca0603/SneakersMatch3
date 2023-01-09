@@ -22,7 +22,7 @@ class CreateProfilesTable extends Migration
             $table->integer('prefecture_id');
             $table->string('musical_experience');
             $table->string('message');
-            $table->string('image_id');
+            $table->string('image_url');
             $table->timestamps();
         });
     }

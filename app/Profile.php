@@ -17,7 +17,7 @@ class Profile extends Model
         'prefecture_id',
         'musical_experience',
         'message',
-        'image_id'
+        'image_url'
     ];
     
     public function user()

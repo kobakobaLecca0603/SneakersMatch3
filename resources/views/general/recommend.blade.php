@@ -40,7 +40,7 @@
                             </div>
                             
                             <p>スニーカー歴:{{$profile->musical_experience}}</p>
-                            <img src="{{$profile->image->image_path}}" alt="" class='image_search' />
+                            <img src="{{$profile->image_url}}" alt="" class='image_search' />
                         </div>
                     @endforeach
                 </div>
