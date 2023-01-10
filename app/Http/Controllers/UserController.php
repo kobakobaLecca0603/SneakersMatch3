@@ -38,10 +38,10 @@ class UserController extends Controller
         
     }
     
-    //ユーザーがプロフィール作成時に選択した楽器に紐づく既存ユーザーのプロフィールを表示させるメソッド
+    //ユーザーがプロフィール作成時に選択したスニーカーに紐づく既存ユーザーのプロフィールを表示させるメソッド
     public function recommend(Profile $profile, Instrument $instrument){
         
-        //ログインユーザーのプロファイルから楽器IDを取得
+        //ログインユーザーのプロファイルからスニーカーIDを取得
         $instrumentAuth = $profile->instruments;
         
         $instrumentIdArray = array();
@@ -51,10 +51,10 @@ class UserController extends Controller
             array_push($instrumentIdArray, $instrumentId);
         }
         
-        //楽器データに紐付くプロフィールを格納しておく変数を$searchedProfilesと定義
+        //スニーカーデータに紐付くプロフィールを格納しておく変数を$searchedProfilesと定義
         $searchedProfiles= array();
         
-        //楽器からプロフィールを抽出
+        //スニーカーからプロフィールを抽出
         foreach($instrumentIdArray as $id){
             $instrument = Instrument::where('id', [$id])->first();
             $instrumentProfile = $instrument->profiles;
@@ -64,7 +64,7 @@ class UserController extends Controller
                 }
             }
         }  
-        //楽器からプロフィールを抽出終了
+        //スニーカーからプロフィールを抽出終了
         
         //該当するプロフィールのidを全部取得し、重複を無くす
         $id_list = array_column( $searchedProfiles, 'id');
@@ -123,12 +123,12 @@ class UserController extends Controller
     public function store(ProfileRequest $request, Profile $profile, Image $image)
     {  
         
-        //s3へのファイルアップロード開始
+        //Cloudinaryへのファイルアップロード開始
         $input = $request['image'];
         $image_url = Cloudinary::upload($request->file('image')->getRealPath())->getSecurePath();
        
         
-        //s3へのファイルアップロード終了
+        //Cloudinaryへのファイルアップロード終了
         
         //プロフィール内容の取得開始
         $input_profile = $request['profile'];
@@ -162,12 +162,12 @@ class UserController extends Controller
     //ログインユーザーが自身のプロフィールを編集して更新するためのメソッド
     public function update(Request $request, Profile $profile, Image $image)
     {   
-        //s3へのファイルアップロード開始
+        //Cloudinaryへのファイルアップロード開始
         $profile_image = $request->file('image');
         $path = Storage::disk('s3')->putFile('myprefix', $profile_image, 'public');
         $image->image_path = Storage::disk('s3')->url($path);
         $image->save();
-        //s3へのファイルアップロード終了
+        //Cloudinaryへのファイルアップロード終了
         
         //プロフィール内容の取得開始
         $input_profile = $request['profile'];
@@ -200,20 +200,20 @@ class UserController extends Controller
             ]);
     }
     
-    //選択した居住地と楽器を元に検索をかけて、該当するプロフィールを表示させるメソッド
+    //選択した居住地とスニーカーを元に検索をかけて、該当するプロフィールを表示させるメソッド
     public function search(SearchRequest $request, Profile $profile, Instrument $instrument)
     {   
         //検索フォームから取得した居住地idを$prefectureIDに格納
         $prefectureId = $request['profile']['prefecture_id'];
         
-        //検索フォームから取得した楽器のデータを$instrumentIdに格納
+        //検索フォームから取得したスニーカーのデータを$instrumentIdに格納
         $instrumentId  = $request['instruments_array'];
         
         //楽器データに紐付くプロフィールを格納しておく変数を$searchedProfilesと定義
         $profiles_array = array();
         
         
-        //楽器からプロフィールを抽出
+        //スニーカーからプロフィールを抽出
         foreach($instrumentId as $id){
             $instrument = Instrument::find($id);
             $instrumentProfile = $instrument->profiles;
@@ -221,12 +221,12 @@ class UserController extends Controller
                 array_push($profiles_array, $profiles);
                 }
             }
-        //楽器からプロフィールを抽出終了
+        //スニーカーからプロフィールを抽出終了
         
-        //楽器と居住地で絞り込んだプロフィールを格納する変数を定義。
+        //スニーカーと居住地で絞り込んだプロフィールを格納する変数を定義。
         $profilesAllSearched = array();
         
-        //楽器で絞り込んだプロフィールの中で、選択した居住地に当てはまるプロフィールを抽出。
+        //スニーカーで絞り込んだプロフィールの中で、選択した居住地に当てはまるプロフィールを抽出。
         foreach($profiles_array as $profile){
             $prefectureSearched = $profile->prefecture_id;
             //自身のプロフィールを除外
