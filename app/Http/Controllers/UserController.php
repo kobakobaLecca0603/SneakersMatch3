@@ -163,10 +163,8 @@ class UserController extends Controller
     public function update(Request $request, Profile $profile, Image $image)
     {   
         //Cloudinaryへのファイルアップロード開始
-        $profile_image = $request->file('image');
-        $path = Storage::disk('s3')->putFile('myprefix', $profile_image, 'public');
-        $image->image_path = Storage::disk('s3')->url($path);
-        $image->save();
+       $input = $request['image'];
+        $image_url = Cloudinary::upload($request->file('image')->getRealPath())->getSecurePath();
         //Cloudinaryへのファイルアップロード終了
         
         //プロフィール内容の取得開始
